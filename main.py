@@ -19,6 +19,7 @@ def main():
     right_click_delay = 0.5
 
     prev_y = 0
+    dragging = False
 
     while True:
 
@@ -53,9 +54,18 @@ def main():
 
             current_time = time.time()
 
-            if distance < 30 and current_time - last_click_time > click_delay:
-                pyautogui.click()
-                last_click_time = current_time
+            # drag gesture
+            if distance < 30:
+
+                if not dragging:
+                    pyautogui.mouseDown()
+                    dragging = True
+
+            else:
+
+                if dragging:
+                    pyautogui.mouseUp()
+                    dragging = False
 
             index = (landmarks[8][1], landmarks[8][2])
             middle = (landmarks[12][1], landmarks[12][2])
