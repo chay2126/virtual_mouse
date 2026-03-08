@@ -23,7 +23,7 @@ def main():
 
             fingers = tracker.get_fingers_up(landmarks)
 
-            # index finger tip
+            # index finger position
             x = landmarks[8][1]
             y = landmarks[8][2]
 
@@ -32,10 +32,18 @@ def main():
             screen_x = int(x * screen_w / frame_w)
             screen_y = int(y * screen_h / frame_h)
 
+            # cursor movement
             if fingers[1] == 1 and fingers[2] == 0:
                 pyautogui.moveTo(screen_x, screen_y)
 
-            print(fingers)
+            # thumb and index coordinates
+            thumb = (landmarks[4][1], landmarks[4][2])
+            index = (landmarks[8][1], landmarks[8][2])
+
+            distance = tracker.find_distance(thumb, index)
+
+            if distance < 30:
+                pyautogui.click()
 
         cv2.imshow("Virtual Mouse - Hand Tracking", frame)
 

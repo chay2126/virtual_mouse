@@ -1,5 +1,6 @@
 import cv2
 import mediapipe as mp
+import math
 
 class HandTracker:
 
@@ -78,3 +79,12 @@ class HandTracker:
             fingers.append(0)
 
         return fingers
+    
+    def find_distance(self, p1, p2):
+
+        x1, y1 = p1
+        x2, y2 = p2
+
+        distance = math.hypot(x2 - x1, y2 - y1)
+
+        return distance
