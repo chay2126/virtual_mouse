@@ -15,6 +15,9 @@ def main():
     last_click_time = 0
     click_delay = 0.5
 
+    last_right_click_time = 0
+    right_click_delay = 0.5
+
     while True:
 
         success, frame = cap.read()
@@ -51,6 +54,15 @@ def main():
             if distance < 30 and current_time - last_click_time > click_delay:
                 pyautogui.click()
                 last_click_time = current_time
+
+            index = (landmarks[8][1], landmarks[8][2])
+            middle = (landmarks[12][1], landmarks[12][2])
+
+            distance_im = tracker.find_distance(index, middle)
+
+            if distance_im < 30 and current_time - last_right_click_time > right_click_delay:
+                pyautogui.rightClick()
+                last_right_click_time = current_time    
 
         cv2.imshow("Virtual Mouse - Hand Tracking", frame)
 
