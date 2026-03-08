@@ -18,6 +18,8 @@ def main():
     last_right_click_time = 0
     right_click_delay = 0.5
 
+    prev_y = 0
+
     while True:
 
         success, frame = cap.read()
@@ -62,7 +64,25 @@ def main():
 
             if distance_im < 30 and current_time - last_right_click_time > right_click_delay:
                 pyautogui.rightClick()
-                last_right_click_time = current_time    
+                last_right_click_time = current_time
+
+            # scroll gesture
+            if fingers[1] == 1 and fingers[2] == 1 and fingers[0] == 0:
+
+                current_y = landmarks[8][2]
+
+                if prev_y != 0:
+
+                    if current_y - prev_y > 15:
+                        pyautogui.scroll(-30)
+
+                    elif prev_y - current_y > 15:
+                        pyautogui.scroll(30)
+
+                prev_y = current_y
+
+            else:
+                prev_y = 0      
 
         cv2.imshow("Virtual Mouse - Hand Tracking", frame)
 
