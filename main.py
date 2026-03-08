@@ -12,6 +12,9 @@ def main():
 
     screen_w, screen_h = pyautogui.size()
 
+    smoothening = 7
+    prev_x, prev_y_cursor = 0, 0
+
     last_click_time = 0
     click_delay = 0.5
 
@@ -44,8 +47,12 @@ def main():
 
             # cursor movement
             if fingers[1] == 1 and fingers[2] == 0:
-                pyautogui.moveTo(screen_x, screen_y)
+                curr_x = prev_x + (screen_x - prev_x) / smoothening
+                curr_y = prev_y_cursor + (screen_y - prev_y_cursor) / smoothening
 
+                pyautogui.moveTo(curr_x, curr_y)
+
+                prev_x, prev_y_cursor = curr_x, curr_y
             # thumb and index coordinates
             thumb = (landmarks[4][1], landmarks[4][2])
             index = (landmarks[8][1], landmarks[8][2])
@@ -67,6 +74,7 @@ def main():
                     pyautogui.mouseUp()
                     dragging = False
 
+            # middle and index coordinates
             index = (landmarks[8][1], landmarks[8][2])
             middle = (landmarks[12][1], landmarks[12][2])
 
