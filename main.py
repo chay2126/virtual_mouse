@@ -1,5 +1,6 @@
 import cv2
 import pyautogui
+import time
 from hand_tracking.hand_tracker import HandTracker
 
 
@@ -10,6 +11,9 @@ def main():
     tracker = HandTracker()
 
     screen_w, screen_h = pyautogui.size()
+
+    last_click_time = 0
+    click_delay = 0.5
 
     while True:
 
@@ -42,8 +46,11 @@ def main():
 
             distance = tracker.find_distance(thumb, index)
 
-            if distance < 30:
+            current_time = time.time()
+
+            if distance < 30 and current_time - last_click_time > click_delay:
                 pyautogui.click()
+                last_click_time = current_time
 
         cv2.imshow("Virtual Mouse - Hand Tracking", frame)
 
